@@ -446,10 +446,26 @@ def main():
     parser.add_argument('--use_wandb', action='store_true', help='Use Weights & Biases')
     
     args = parser.parse_args()
-    
+
+    # If user requested CUDA but the installed PyTorch isn't CUDA-enabled,
+    # fall back to CPU and warn instead of crashing with an AssertionError.
+    req_device = str(args.device).lower()
+    if 'cuda' in req_device:
+        cuda_available = False
+        try:
+            cuda_available = torch.cuda.is_available()
+        except Exception:
+            cuda_available = False
+
+        if not cuda_available:
+            print("Warning: Requested CUDA device but the installed PyTorch is not CUDA-enabled.")
+            print("Falling back to CPU. To use GPU, install a CUDA-enabled PyTorch build (see COLAB_QUICKSTART.md).")
+            args.device = 'cpu'
+
     # Create trainer and run
     trainer = CLSOTrainer(args)
-    trainer.train()
+    results = trainer.train()
+    return results
 
 
 if __name__ == "__main__":
