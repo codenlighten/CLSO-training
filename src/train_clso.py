@@ -274,8 +274,15 @@ class CLSOTrainer:
         
         self.energy_monitor.start_measurement()
         
+        # Evaluate initial random population to get baseline
+        print("Evaluating initial population...")
+        initial_genome = self.genetic_opt.population[0]
+        initial_loss = self.evaluate_genome(initial_genome)
+        print(f"Initial loss: {initial_loss:.4f}\n")
+        
         best_loss = float('inf')
         best_genome = None
+        best_generation = 0
         
         for generation in range(self.args.num_generations):
             gen_start = time.time()
@@ -316,6 +323,7 @@ class CLSOTrainer:
             if gen_best_loss < best_loss:
                 best_loss = gen_best_loss
                 best_genome = gen_best_genome.copy()
+                best_generation = generation + 1  # 1-indexed for display
                 
                 # Save best model
                 checkpoint = {
@@ -377,26 +385,34 @@ class CLSOTrainer:
         print("\n" + "="*80)
         print("Training Complete!")
         print("="*80)
+        print(f"Initial Loss: {initial_loss:.4f}")
         print(f"Best Loss: {best_loss:.4f}")
+        print(f"Found at Generation: {best_generation}")
+        print(f"Improvement: {initial_loss - best_loss:.4f}")
         print(f"Total Energy Consumed: {total_energy:.4f} Wh")
         print(f"Best genome saved to: {self.exp_dir / 'best_genome.pt'}")
         
         # Save final results
         results = {
+            'initial_loss': float(initial_loss),
             'best_loss': float(best_loss),
+            'best_generation': int(best_generation),
             'best_genome': best_genome,
             'total_energy_wh': float(total_energy),
             'num_generations': self.args.num_generations,
+            'improvement': float(initial_loss - best_loss),
             'config': vars(self.args)
         }
         
         with open(self.exp_dir / 'results.json', 'w') as f:
-            json.dump(results, f, indent=2)
+            json.dump({k: v for k, v in results.items() if k != 'best_genome'}, f, indent=2)
         
         self.energy_monitor.shutdown()
         
         if self.args.use_wandb:
             wandb.finish()
+        
+        return results
 
 
 def main():
