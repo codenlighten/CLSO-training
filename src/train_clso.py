@@ -25,9 +25,16 @@ except ImportError:
     NVML_AVAILABLE = False
     print("Warning: pynvml not available. GPU energy monitoring disabled.")
 
-from .basis_library import BasisLibrary
-from .crystalline_model import CrystallineGPT2
-from .genetic_optimizer import GeneticOptimizer
+# Handle both direct script execution and package imports
+try:
+    from .basis_library import BasisLibrary
+    from .crystalline_model import CrystallineGPT2
+    from .genetic_optimizer import GeneticOptimizer
+except ImportError:
+    # If relative imports fail, try absolute imports
+    from basis_library import BasisLibrary
+    from crystalline_model import CrystallineGPT2
+    from genetic_optimizer import GeneticOptimizer
 
 
 class EnergyMonitor:

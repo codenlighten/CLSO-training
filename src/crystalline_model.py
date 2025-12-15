@@ -12,8 +12,11 @@ from transformers import GPT2Config, GPT2Model, GPT2LMHeadModel
 from typing import List, Optional
 import copy
 
-# Import the library class we defined previously
-from .basis_library import BasisLibrary
+# Import the library class - handle both package and direct imports
+try:
+    from .basis_library import BasisLibrary
+except ImportError:
+    from basis_library import BasisLibrary
 
 
 class CrystallineLinear(nn.Module):
