@@ -13,7 +13,7 @@ from typing import List, Optional
 import copy
 
 # Import the library class we defined previously
-from basis_library import BasisLibrary
+from .basis_library import BasisLibrary
 
 
 class CrystallineLinear(nn.Module):
