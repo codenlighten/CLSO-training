@@ -1,0 +1,46 @@
+{
+  "summary": {
+    "clso_loss": 1.6538,
+    "baseline_loss": 2.8417306418716906,
+    "loss_difference": 1.1879306418716906,
+    "loss_percentage": 41.80306973391632,
+    "clso_competitive": false,
+    "clso_energy_wh": 1.9275,
+    "baseline_energy_wh": 1.464035643471612,
+    "energy_savings_wh": -0.463464356528388,
+    "energy_savings_pct": -31.656630669823905
+  },
+  "clso_details": {
+    "best_loss": 1.6538,
+    "best_genome": "see_checkpoint",
+    "total_energy_wh": 1.9275,
+    "num_generations": 50,
+    "config": {
+      "n_embd": 128,
+      "n_layer": 2,
+      "library_size": 64,
+      "pop_size": 32
+    }
+  },
+  "baseline_details": {
+    "best_loss": 2.8417306418716906,
+    "final_loss": 2.8417306418716906,
+    "total_energy_wh": 1.464035643471612,
+    "final_epoch": 1,
+    "total_steps": 500,
+    "config": {
+      "n_embd": 128,
+      "n_layer": 2,
+      "n_head": 2,
+      "seq_length": 128,
+      "num_epochs": 1,
+      "batch_size": 4,
+      "lr": 0.0005,
+      "eval_every": 1000,
+      "eval_batches": 50,
+      "max_batches_per_epoch": 500,
+      "exp_dir": "./experiments/baseline_comparison"
+    }
+  },
+  "conclusion": "CLSO achieved 1.6538 loss compared to baseline's 2.8417. While not competitive in this experiment, the approach shows promise and may benefit from larger library sizes or more generations."
+}
