@@ -86,7 +86,7 @@ class CLSOTrainer:
     
     def __init__(self, args):
         self.args = args
-        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        self.device = torch.device(args.device)
         print(f"Using device: {self.device}")
         
         # Initialize energy monitor
@@ -408,23 +408,24 @@ def main():
     parser.add_argument('--n_head', type=int, default=4, help='Number of attention heads')
     parser.add_argument('--seq_length', type=int, default=512, help='Sequence length')
     
-    # CLSO specific
-    parser.add_argument('--library_size', type=int, default=256, help='Basis library size')
-    parser.add_argument('--pop_size', type=int, default=128, help='Population size')
-    parser.add_argument('--num_generations', type=int, default=500, help='Number of generations')
-    parser.add_argument('--mutation_rate', type=float, default=0.08, help='Mutation rate')
-    parser.add_argument('--crossover_rate', type=float, default=0.75, help='Crossover rate')
-    parser.add_argument('--surrogate_update_freq', type=int, default=10, help='Surrogate update frequency')
-    parser.add_argument('--local_search_freq', type=int, default=50, help='Local search frequency')
-    parser.add_argument('--full_eval_fraction', type=float, default=0.2, help='Fraction of pop to fully evaluate')
+    # CLSO specific (support both underscore and hyphen versions)
+    parser.add_argument('--library_size', '--library-size', type=int, default=256, help='Basis library size')
+    parser.add_argument('--pop_size', '--pop-size', type=int, default=128, help='Population size')
+    parser.add_argument('--num_generations', '--generations', type=int, default=500, help='Number of generations')
+    parser.add_argument('--mutation_rate', '--mutation-rate', type=float, default=0.08, help='Mutation rate')
+    parser.add_argument('--crossover_rate', '--crossover-rate', type=float, default=0.75, help='Crossover rate')
+    parser.add_argument('--surrogate_update_freq', '--surrogate-update-freq', type=int, default=10, help='Surrogate update frequency')
+    parser.add_argument('--local_search_freq', '--local-search-freq', type=int, default=50, help='Local search frequency')
+    parser.add_argument('--full_eval_fraction', '--full-eval-fraction', type=float, default=0.2, help='Fraction of pop to fully evaluate')
     
     # Training
     parser.add_argument('--dataset', type=str, default='wikitext', help='Dataset name')
-    parser.add_argument('--batch_size', type=int, default=8, help='Batch size')
-    parser.add_argument('--eval_batches', type=int, default=50, help='Number of batches for evaluation')
+    parser.add_argument('--batch_size', '--batch-size', type=int, default=8, help='Batch size')
+    parser.add_argument('--eval_batches', '--eval-batches', type=int, default=50, help='Number of batches for evaluation')
+    parser.add_argument('--device', type=str, default='cuda' if torch.cuda.is_available() else 'cpu', help='Device to use')
     
     # Experiment
-    parser.add_argument('--exp_dir', type=str, default='./experiments/clso_run', help='Experiment directory')
+    parser.add_argument('--exp_dir', '--output-dir', type=str, default='./experiments/clso_run', help='Experiment directory')
     parser.add_argument('--exp_name', type=str, default='clso_experiment', help='Experiment name')
     parser.add_argument('--use_wandb', action='store_true', help='Use Weights & Biases')
     

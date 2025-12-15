@@ -32,10 +32,22 @@ from src.genetic_optimizer import GeneticOptimizer
 
 ## Quick Test Command
 
-Once imports work, run:
+Once imports work, run using the wrapper script (recommended):
 
 ```bash
-python /content/CLSO-training/src/train_clso.py \
+python /content/CLSO-training/run_training.py \
+    --generations 5 \
+    --pop-size 16 \
+    --batch-size 16 \
+    --device cuda \
+    --output-dir experiments/quick_test_gpu
+```
+
+Or run directly (also works now):
+
+```bash
+cd /content/CLSO-training
+python src/train_clso.py \
     --generations 5 \
     --pop-size 16 \
     --batch-size 16 \
